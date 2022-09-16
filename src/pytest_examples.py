@@ -1,3 +1,3 @@
 
 def raise_exception():
-    raise SystemExit(1)
+    raise SystemExit("My SystemExit exception message")
