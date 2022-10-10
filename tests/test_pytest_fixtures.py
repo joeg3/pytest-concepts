@@ -5,6 +5,9 @@ def test_command_line_flags(browser, config):
     print('Browser from browser fixture: ', browser)
     print('Browser from config fixture: ', config['browser'])
 
+def test_fixture_provides_data_for_test(provide_data_for_test):
+    assert provide_data_for_test == 8
+
 # Even though the 'hi' fixture is set to autouse, we specify it as a parameter so we can reference
 # the fixture's return value
 def test_autouse_hi(hi):

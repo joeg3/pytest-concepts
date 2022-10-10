@@ -8,6 +8,25 @@ def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="firefox", choices=("firefox", "safari"), help="Browser name, options are: 'firefox', 'safari'. Default is firefox")
     parser.addoption("--env", action="store", default="", help="Test environment name, options are: 'dev', 'stage'. Default is dev")
 
+    # Examples of things you can do with addoption()
+    parser.addoption('--foo', action='store_const', const='42') # If --foo is specified in cmd line, it's value is set to 42
+    parser.addoption('--my_true_flag', action='store_true') # If --my_true_flag is specified in cmd line, it's value is set to true (specialized case of store_const)
+    parser.addoption('--bar', default='abc') # If --bar is not specified, set to 'abc'
+    parser.addoption('--baz', choices=['rock', 'paper', 'scissors']) # parameter must be one of three specifed choices
+    parser.addoption('--y', action='store')
+    parser.addoption('--z') # action='store' is the default
+    # parser.addoption('--zz', required=True) # default is that flags are optional
+
+@pytest.fixture(scope='session', autouse=True)
+def foo(request):
+    print('\n--foo: ', request.config.getoption('--foo')) # Will be '42' if flag used in cmd line
+    print('--my_true_flag: ', request.config.getoption('--my_true_flag')) # Will be 'True' if flag used in cmd line
+    print('--bar: ', request.config.getoption('--bar')) # Will be 'abc' if --bar not used in cmd line
+    print('--baz: ', request.config.getoption('--baz')) # If not one of specified choices, will error out and not start test
+    print('--y:', request.config.getoption('--y'))      # Stores argument of --y
+    print('--z:', request.config.getoption('--z'))      # By default, argument to flag is stored
+    # print('--zz:', request.config.getoption('--zz'))    # Required flag
+
 # One approach is to have a fixture for each CLI arg. This returns value of --browser option
 @pytest.fixture(scope='session', autouse=True)
 def browser(request):
@@ -20,6 +39,11 @@ def config(request):
     config['browser'] = request.config.getoption('--browser')
     config['env'] = request.config.getoption('--env')
     return config
+
+# Basic fixture to provide data to tests that use it
+@pytest.fixture(scope='session')
+def provide_data_for_test():
+    return 8
 
 # With autouse=True in this fixture, this fixture is applied to all tests, even if fixture not passed in
 # In the testcase, if you put the fixture in the parameter list, you can reference its return value

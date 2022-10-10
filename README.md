@@ -27,9 +27,9 @@
 - An exception that happens in the test case code results in a “Fail” result.
 - An exception that happens in the test fixture code results in an “Error” result.
 - Fixtures return data with `return` or `yield`.
-- In a fixture, code before a `yield` statement is 'setup' code, and code after the `yield` is 'tear down' code and is run even if the test case throws an exceptiion
+- In a fixture, code before a `yield` statement is 'setup' code, and code after the `yield` is 'tear down' code and is run even if the test case fails or throws an exceptiion
 - The values for fixture scope: function, class, module, package, session. Scope is set in the fixture definition, not the test.
 - Fixtures can depend on other fixtures of same or wider scope.
 
 ## Resources
-- [Pytest official site](https://docs.pytest.org/en/7.1.x)
+- [Pytest official site](https://docs.pytest.org)
