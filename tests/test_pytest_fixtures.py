@@ -27,3 +27,8 @@ def test_assert2(init_once_for_all_tests):
 # testcase uses the parameterized fixture, it'll be run twice, once for each fixture parameter.
 def test_use_fixture_with_params(param_fixture):
     assert param_fixture in ['a', 'b']
+
+@pytest.mark.parametrize("cleanup_after_test_case", ['some_text_file.txt'], indirect=True)
+def test_run_fixture_after_test(cleanup_after_test_case):
+    assert 1 == 1
+    print('Leaving testcase')

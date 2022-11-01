@@ -85,3 +85,8 @@ def experimental_cmd_line_opt_parser():
 @pytest.fixture(params=['a','b'])
 def param_fixture(request): # Need to use 'request' argument to access params
     return request.param
+
+@pytest.fixture(scope='session')
+def cleanup_after_test_case(request):
+    yield
+    print('***In cleanup_after_test_case(), received param:', request.param) # Close file, etc.
