@@ -42,8 +42,13 @@ def config(request):
 
 # Basic fixture to provide data to tests that use it
 @pytest.fixture(scope='session')
-def provide_data_for_test():
+def supply_int():
     return 8
+
+@pytest.fixture(scope='class')
+def fixture_sets_int_in_class_variable(request):
+    request.cls.my_int = 7
+    yield
 
 # With autouse=True in this fixture, this fixture is applied to all tests, even if fixture not passed in
 # In the testcase, if you put the fixture in the parameter list, you can reference its return value
@@ -84,6 +89,10 @@ def experimental_cmd_line_opt_parser():
 # would be run twice
 @pytest.fixture(params=['a','b'])
 def param_fixture(request): # Need to use 'request' argument to access params
+    return request.param
+
+@pytest.fixture(params=[('a1','b1'), ('a2', 'b2')])
+def param_fixture_tuple_per_test_run(request): # Need to use 'request' argument to access params
     return request.param
 
 @pytest.fixture(scope='session')

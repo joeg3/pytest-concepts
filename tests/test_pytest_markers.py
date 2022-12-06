@@ -4,10 +4,11 @@ import pytest
 # The 'skip' marker comes with pytest, we don't need to put it in pytest.ini
 @pytest.mark.skip(reason='Todo: Implement test when api finished')
 def test_some_api():
-    pass
+    assert 2 == 1 + 5
 
 # The 'sanity' marker is custom, created by us. Need to put it in pytest.ini so we
 # don't get warning, and so it is listed when running: pytest --markers
+# To only run tests marked 'sanity': poetry run pytest -vs -m sanity
 @pytest.mark.sanity
 def test_marked_as_sanity():
     pass
