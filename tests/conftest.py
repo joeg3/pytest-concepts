@@ -1,6 +1,8 @@
 # The conftest.py file is a standard pytest file where you can store all
 # your common functions and fixtures commonly used by many test cases.
 
+import inspect
+import logging
 import pytest
 
 def pytest_addoption(parser):
@@ -99,3 +101,25 @@ def param_fixture_tuple_per_test_run(request): # Need to use 'request' argument 
 def cleanup_after_test_case(request):
     yield
     print('***In cleanup_after_test_case(), received param:', request.param) # Close file, etc.
+
+@pytest.fixture(scope='session', autouse=True)
+def logger():
+        # Usual way to have test name displayed in log entries if this log setup code was in the same file as the tests
+        #logger = logging.getLogger(__name__) # Passing in __name__ makes current file name being executed available for the log entry
+
+        # Since we are setting up logging in conftest.py, 'tests.conftest' is the name displayed in the log entries
+        # This hack gets the name of the test
+        loggerName = inspect.stack()[2][3]
+        logger = logging.getLogger(loggerName)
+
+        file_handler = logging.FileHandler('logs/logfile.log')
+
+        # <time> : <logger level> : <file name> : <message from log statement> | <filename>:<line number>
+        format = logging.Formatter("%(asctime)s : %(levelname)s : %(name)s : %(message)s | (%(filename)s:%(lineno)s)")
+        file_handler.setFormatter(format)
+
+        logger.addHandler(file_handler)
+
+        logger.setLevel(logging.INFO) # Only log INFO and higher, this won't log DEBUG statements
+        return logger
+    
