@@ -42,16 +42,16 @@ def config(request):
     config['env'] = request.config.getoption('--env')
     return config
 
-# Basic fixture to provide data to tests that use it
-@pytest.fixture(scope='session')
-def return_int():
-    return 8
-
 # Add request parameter to set class field that can be used by a test class that uses this fixture
 @pytest.fixture(scope='class')
 def set_int_in_class_variable(request):
     request.cls.my_int = 7
     yield
+
+# Basic fixture to provide data to tests that use it
+@pytest.fixture(scope='session')
+def return_int():
+    return 8
 
 # Use yield to run fixture code both before and after test
 @pytest.fixture(scope='class')
@@ -59,6 +59,11 @@ def yield_int(request):
     yield_int = 9  # Setup
     yield yield_int
     yield_int = 0  # Tear down
+
+# Since it's a parameter, first return_int fixture runs, and returns its value to this fixture
+@pytest.fixture(scope='session')
+def chained_fixture(return_int):
+    return 4 + return_int
 
 # Here the fixture gets a value back from the test case
 @pytest.fixture(scope='session')
@@ -111,6 +116,8 @@ def param_fixture(request): # Need to use 'request' argument to access params
 def param_fixture_tuple_per_test_run(request): # Need to use 'request' argument to access params
     return request.param
 
+# Since this fixture returns a value that is necessary for its use (logger), it doesn't help thatautouse=True.
+# To access logger in the test case, we have to include the fixture name (logger) as a test case parameter anyhow.
 @pytest.fixture(scope='session', autouse=True)
 def logger():
         # Usual way to have test name displayed in log entries if this log setup code was in the same file as the tests

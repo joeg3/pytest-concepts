@@ -5,8 +5,14 @@ def test_command_line_flags(browser, config):
     print('Browser from browser fixture: ', browser)
     print('Browser from config fixture: ', config['browser'])
 
-def test_fixture_provides_data_for_test(return_int):
+def test_fixture_returns_data_for_test(return_int):
     assert return_int == 8
+
+def test_fixture_yields_data_for_test(yield_int):
+    assert yield_int == 9
+
+def test_chained_fixtures(chained_fixture):
+    assert chained_fixture == 12
 
 # Even though the 'hi' fixture is set to autouse, we specify it as a parameter so we can reference
 # the fixture's return value
