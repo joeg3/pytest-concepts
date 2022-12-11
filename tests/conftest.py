@@ -11,23 +11,23 @@ def pytest_addoption(parser):
     parser.addoption("--env", action="store", default="", help="Test environment name, options are: 'dev', 'stage'. Default is dev")
 
     # Examples of things you can do with addoption()
-    parser.addoption('--foo', action='store_const', const='42') # If --foo is specified in cmd line, it's value is set to 42
-    parser.addoption('--my_true_flag', action='store_true') # If --my_true_flag is specified in cmd line, it's value is set to true (specialized case of store_const)
-    parser.addoption('--bar', default='abc') # If --bar is not specified, set to 'abc'
-    parser.addoption('--baz', choices=['rock', 'paper', 'scissors']) # parameter must be one of three specifed choices
-    parser.addoption('--y', action='store')
-    parser.addoption('--z') # action='store' is the default
-    # parser.addoption('--zz', required=True) # default is that flags are optional
+    parser.addoption('--foo', action='store_const', const='42')      # If --foo is specified in cmd line, it's value is set to 42
+    parser.addoption('--my_true_flag', action='store_true')          # If --my_true_flag is specified in cmd line, it's value is set to true (specialized case of store_const)
+    parser.addoption('--bar', default='abc')                         # If --bar is not specified, set to 'abc'
+    parser.addoption('--baz', choices=['rock', 'paper', 'scissors']) # Parameter must be one of three specifed choices
+    parser.addoption('--y', action='store')                          # Explicitly store value
+    parser.addoption('--z')                                          # action='store' is the default
+    # parser.addoption('--zz', required=True)                        # Default is that cmd line flags are optional
 
 @pytest.fixture(scope='session', autouse=True)
 def foo(request):
-    print('\n--foo: ', request.config.getoption('--foo')) # Will be '42' if flag used in cmd line
+    print('\n--foo: ', request.config.getoption('--foo'))                 # Will be '42' if flag used in cmd line
     print('--my_true_flag: ', request.config.getoption('--my_true_flag')) # Will be 'True' if flag used in cmd line
-    print('--bar: ', request.config.getoption('--bar')) # Will be 'abc' if --bar not used in cmd line
-    print('--baz: ', request.config.getoption('--baz')) # If not one of specified choices, will error out and not start test
-    print('--y:', request.config.getoption('--y'))      # Stores argument of --y
-    print('--z:', request.config.getoption('--z'))      # By default, argument to flag is stored
-    # print('--zz:', request.config.getoption('--zz'))    # Required flag
+    print('--bar: ', request.config.getoption('--bar'))                   # Will be 'abc' if --bar not used in cmd line
+    print('--baz: ', request.config.getoption('--baz'))                   # If not one of specified choices, will error out and not start test
+    print('--y:', request.config.getoption('--y'))                        # Stores argument of --y
+    print('--z:', request.config.getoption('--z'))                        # By default, argument to flag is stored
+    # print('--zz:', request.config.getoption('--zz'))                    # Required flag
 
 # One approach is to have a fixture for each CLI arg. This returns value of --browser option
 @pytest.fixture(scope='session', autouse=True)
@@ -44,13 +44,27 @@ def config(request):
 
 # Basic fixture to provide data to tests that use it
 @pytest.fixture(scope='session')
-def supply_int():
+def return_int():
     return 8
 
+# Add request parameter to set class field that can be used by a test class that uses this fixture
 @pytest.fixture(scope='class')
-def fixture_sets_int_in_class_variable(request):
+def set_int_in_class_variable(request):
     request.cls.my_int = 7
     yield
+
+# Use yield to run fixture code both before and after test
+@pytest.fixture(scope='class')
+def yield_int(request):
+    yield_int = 9  # Setup
+    yield yield_int
+    yield_int = 0  # Tear down
+
+# Here the fixture gets a value back from the test case
+@pytest.fixture(scope='session')
+def cleanup_after_test_case(request):
+    yield
+    print('***In cleanup_after_test_case(), received param:', request.param) # Close file, etc.
 
 # With autouse=True in this fixture, this fixture is applied to all tests, even if fixture not passed in
 # In the testcase, if you put the fixture in the parameter list, you can reference its return value
@@ -96,11 +110,6 @@ def param_fixture(request): # Need to use 'request' argument to access params
 @pytest.fixture(params=[('a1','b1'), ('a2', 'b2')])
 def param_fixture_tuple_per_test_run(request): # Need to use 'request' argument to access params
     return request.param
-
-@pytest.fixture(scope='session')
-def cleanup_after_test_case(request):
-    yield
-    print('***In cleanup_after_test_case(), received param:', request.param) # Close file, etc.
 
 @pytest.fixture(scope='session', autouse=True)
 def logger():
