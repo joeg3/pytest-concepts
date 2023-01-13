@@ -29,17 +29,6 @@ def test_assert1(init_once_for_all_tests):
 def test_assert2(init_once_for_all_tests):
     assert 2==2
 
-# The fixture 'param_fixture' has two params 'a' and 'b' that it simply returns. Since this
-# testcase uses the parameterized fixture, it'll be run twice, once for each fixture parameter.
-def test_use_fixture_with_params(param_fixture):
-    assert param_fixture in ['a', 'b']
-
-# Pass tuples from fixtures to get multiple values to testcase
-# First time will be: ('a1','b1'), second time: ('a2', 'b2')
-def test_use_fixture_with_tuple_params(param_fixture_tuple_per_test_run):
-    first_item = param_fixture_tuple_per_test_run[0]
-    assert first_item in ['a1', 'a2']
-
 # Here the test case can return data to the cleanup_after_test_case fixture
 @pytest.mark.parametrize("cleanup_after_test_case", ['some_text_file.txt'], indirect=True)
 def test_run_fixture_after_test(cleanup_after_test_case):

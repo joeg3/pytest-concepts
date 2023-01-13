@@ -14,10 +14,6 @@ def test_raised_exception_info():
     expected = "My SystemExit exception message"
     assert expected in str(ex_obj.value)
 
-# Parameters defined in the fixture
-def test_param_fixture(param_fixture):
-    print('Param printed in line above')
-
 # Contrived example if you needed to explicitly fail a test
 def test_pytest_fail():
     x = 3

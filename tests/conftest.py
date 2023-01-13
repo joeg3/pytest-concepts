@@ -106,16 +106,6 @@ def setup_teardown_browser(browser):
 def experimental_cmd_line_opt_parser():
     pass
 
-# Parameterize with a fixture. Since this fixture has two parameters, a test case using this fixture
-# would be run twice
-@pytest.fixture(params=['a','b'])
-def param_fixture(request): # Need to use 'request' argument to access params
-    return request.param
-
-@pytest.fixture(params=[('a1','b1'), ('a2', 'b2')])
-def param_fixture_tuple_per_test_run(request): # Need to use 'request' argument to access params
-    return request.param
-
 # Since this fixture returns a value that is necessary for its use (logger), it doesn't help thatautouse=True.
 # To access logger in the test case, we have to include the fixture name (logger) as a test case parameter anyhow.
 @pytest.fixture(scope='session', autouse=True)
