@@ -106,6 +106,17 @@ def setup_teardown_browser(browser):
 def experimental_cmd_line_opt_parser():
     pass
 
+# The test can optionally use a marker to send data to the fixture
+@pytest.fixture(scope="function")
+def prefix_jones(request):
+    last_name = "Jones"
+    p = request.node.get_closest_marker("prefix") # Gets data from test case
+    if p and len(p.args) > 0:
+        prefix = p.args[0]
+        return f"{prefix} {last_name}"
+    else: # Test doesn't use prefix marker or doesn't give it an argument
+        return last_name
+
 # Since this fixture returns a value that is necessary for its use (logger), it doesn't help thatautouse=True.
 # To access logger in the test case, we have to include the fixture name (logger) as a test case parameter anyhow.
 @pytest.fixture(scope='session', autouse=True)

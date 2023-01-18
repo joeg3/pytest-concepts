@@ -7,6 +7,7 @@ class Rectangle:
         self.length = length
         self.width = witdh
         self.area = 0
+        self.version = 2 # Software version of this class
 
     def calculate_area(self):
         self.area = self.length * self.width
