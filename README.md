@@ -39,6 +39,8 @@
 - `pytest -rx` shows the captured output of failed tests (default behaviour).
 - `pytest -rA` shows the captured output of all tests.
 - The formatting of the output is prettier with -r than with -s.
+- `pytest -m sanity` runs only tests marked as `sanity`
+- `pytest --markers` shows all the built-in markers that come with pytest and any custom ones we created and put in `pytest.ini`
 
 ## Fixtures
 - [pytest builtin fixtures](https://docs.pytest.org/en/latest/reference/fixtures.html)

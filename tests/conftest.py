@@ -5,16 +5,22 @@ import inspect
 import logging
 import pytest
 
+VALID_BROWSERS = ["firefox", "safari", "chrome"]
+VALID_HAND_SHAPES = ["rock", "paper", "scissors"]
+
+
+
 def pytest_addoption(parser):
     # action="store" stores value in a variable of the same name as the option
-    parser.addoption("--browser", action="store", default="firefox", choices=("firefox", "safari"), help="Browser name, options are: 'firefox', 'safari'. Default is firefox")
+    parser.addoption("--browser", action="store", choices=VALID_BROWSERS, help=f"Browser name, options are: f{VALID_BROWSERS}.")
     parser.addoption("--env", action="store", default="", help="Test environment name, options are: 'dev', 'stage'. Default is dev")
 
     # Examples of things you can do with addoption()
     parser.addoption('--foo', action='store_const', const='42')      # If --foo is specified in cmd line, it's value is set to 42
     parser.addoption('--my_true_flag', action='store_true')          # If --my_true_flag is specified in cmd line, it's value is set to true (specialized case of store_const)
     parser.addoption('--bar', default='abc')                         # If --bar is not specified, set to 'abc'
-    parser.addoption('--baz', choices=['rock', 'paper', 'scissors']) # Parameter must be one of three specifed choices
+    parser.addoption('--baz', choices=['rock', 'paper', 'scissors']) # Parameter must be one of the specifed choices
+    parser.addoption('--bat', choices=VALID_HAND_SHAPES, default='paper') # Parameter must be one of three specifed choices
     parser.addoption('--y', action='store')                          # Explicitly store value
     parser.addoption('--z')                                          # action='store' is the default
     # parser.addoption('--zz', required=True)                        # Default is that cmd line flags are optional
