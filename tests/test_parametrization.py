@@ -13,11 +13,19 @@ testdata = [
 
 
 @pytest.mark.parametrize("a, b, expected", testdata)
-def test_product_by_parametrizing_function_using_variable(a, b, expected):
-    """ Parametrize the test case function itself using a variable for the test data """
+def test_product_by_parametrizing_function_with_variable(a, b, expected):
+    """ Parametrize the test case function by using a variable for the test data """
     product = a * b
     assert product == expected
 
+def get_test_data():
+    return testdata
+
+@pytest.mark.parametrize("a, b, expected", get_test_data())
+def test_product_by_parametrizing_function_with_function(a, b, expected):
+    """ Parametrize the test case function calling a function for the test data """
+    product = a * b
+    assert product == expected
 
 @pytest.mark.parametrize(
     "a, b, expected", 
@@ -27,8 +35,8 @@ def test_product_by_parametrizing_function_using_variable(a, b, expected):
         (1, 7, 7)
     ]
 )
-def test_product_by_parametrizing_function_without_variable(a, b, expected):
-    """ Parametrize the test case function itself by putting the test data in the marker """
+def test_product_by_parametrizing_function_with_marker(a, b, expected):
+    """ Parametrize the test case function by putting the test data in the marker """
     product = a * b
     assert product == expected
 
