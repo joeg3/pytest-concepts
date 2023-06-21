@@ -77,6 +77,14 @@ def cleanup_after_test_case(request):
     yield
     print('***In cleanup_after_test_case(), received param:', request.param) # Close file, etc.
 
+@pytest.fixture(scope='session')
+def user1(request):
+    return "Fred"
+
+@pytest.fixture(scope='session')
+def user2(request):
+    return "Jane"
+
 # With autouse=True in this fixture, this fixture is applied to all tests, even if fixture not passed in
 # In the testcase, if you put the fixture in the parameter list, you can reference its return value
 @pytest.fixture(autouse=True)
@@ -88,7 +96,11 @@ def hi():
 # By default, the scope is 'function', run for each function (test case)
 @pytest.fixture(scope='session')
 def init_once_for_all_tests():
-    print('Since scope is set to session, this fixture runs just once before all testcases')
+    print('!!!!!!!!!!!!!!!!!!!!!Running SESSION fixture')
+
+@pytest.fixture(scope='function')
+def init_for_each_test_tests():
+    print('!!!!!!!!!!!!!!!!!!!!!Running FUNCTION fixture')
 
 # With autouse=True in this fixture, this fixture is applied to all tests
 @pytest.fixture(scope='session', autouse=True)

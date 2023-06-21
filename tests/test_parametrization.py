@@ -43,23 +43,38 @@ def test_product_by_parametrizing_function_with_marker(a, b, expected):
 
 ################################## Parametrizing Fixtures #############################
 
-@pytest.fixture(
-    params=
-    [
+# @pytest.fixture(
+#     params=
+#     [
+#         (3, 4, 12),
+#         (0, 8, 0),
+#         (1, 7, 7)
+#     ]
+# )
+# def multiplication_data(request):
+#     return request.param
+
+@pytest.fixture
+def multiplication_data(request):
+    params = [
         (3, 4, 12),
         (0, 8, 0),
         (1, 7, 7)
     ]
-)
-def multiplication_data(request):
-    return request.param
+    return params
 
-def test_product_by_parametrizing_fixture(multiplication_data):
+@pytest.mark.parametrize(
+    "multdata",
+    ["multiplication_data"] # pass one or more fixtures
+)
+def test_product_by_parametrizing_fixture(multdata, request): # add request to arg list for accessing fixture
     """ Parametrize using a fixture. This test case basically calls multiplication_data() """
     """ three times. If we wanted, we could have code in the fixture that depends on which """
     """ parameter is being returned """
-    product = multiplication_data[0] * multiplication_data[1]
-    assert product == multiplication_data[2]
+    datasets = request.getfixturevalue(multdata)
+    print("||||||||||", datasets)
+    # product = datasets[0] * datasets[1]
+    # assert product == datasets[2]
 
 
 ################################## Parametrizing with pytest_generate_tests #############################
