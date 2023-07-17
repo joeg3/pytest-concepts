@@ -94,3 +94,28 @@ def test_product_with_pytest_generate_tests(mult_data):
     """ Parametrize using hook function pytest_generate_tests(), which generates tests """
     product = mult_data[0] * mult_data[1]
     assert product == mult_data[2]
+
+@pytest.mark.parametrize("number", [1,2,3])
+def test_parametrize_with_list(number):
+    print(f"Number: {number}")
+    assert number < 4
+
+@pytest.mark.parametrize(
+    "code, filename",
+    [
+        (123, "low.txt"),
+        (456, "med.txt"),
+        (789, "high.txt")
+    ]
+)
+def test_parametrize_with_dictionary(code, filename):
+    if code == 123:
+        print(f"Run a test for code {code} using {filename}")
+        assert filename == "low.txt"
+    elif code == 456:
+        print(f"Run a test for code {code} using {filename}")
+        assert filename == "med.txt"
+    elif code == 789:
+        print(f"Run a test for code {code} using {filename}")
+        assert filename == "high.txt"
+
