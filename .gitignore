@@ -4,3 +4,10 @@ __pycache__/
 /logs/
 /reports/
 /results/
+
+# Envirionments
+venv/
+
+# PyCharm
+.idea/
+.DS_Store
