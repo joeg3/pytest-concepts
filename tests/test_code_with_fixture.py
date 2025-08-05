@@ -11,14 +11,9 @@ import pytest
 # But if only used in one file, it can be done like this
 @pytest.fixture(scope='function')
 def my_setup_teardown():
-    # Code befor the yield is 'setup' code
-    print('Open browser')
-    print('Log into site')
-    print('Browse product')
-    yield 'abc' # This is when test case runs, and the value 'abc' can be accessed by each test case using this fixture
-    # Code after the yield is 'tear down' code and is run even if the test case throws an exceptiion
-    print('Logoff')
-    print('Close browser')
+    str = 'abc' # This setup code is run before yield for each test using this fixture
+    yield str  # The variable 'str' is passed to each test case using this fixture
+    print('Logout') # Code after the yield is 'tear down' code and is run even if the test case throws an exception
 
 # With my_setup_teardown as a parameter, this test case will use that fixture. The my_setup_teardown fixture has a scope of function,
 # so it runs each time a test case specifies it.

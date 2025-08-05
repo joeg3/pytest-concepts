@@ -1,3 +1,13 @@
 /poetry.lock
 __pycache__/
 .pytest_cache/
+/logs/
+/reports/
+/results/
+
+# Envirionments
+venv/
+
+# PyCharm
+.idea/
+.DS_Store

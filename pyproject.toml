@@ -1,15 +1,21 @@
-[tool.poetry]
+[project]
 name = "pytest-concepts"
 version = "0.1.0"
 description = "Pytest examples"
-authors = ["Your Name <you@example.com>"]
+authors = [{name = "Me", email = "me@example.com>"}]
+readme = "README.md"
+requires-python = ">=3.13"
 
-[tool.poetry.dependencies]
-python = "^3.10"
-pytest = "^7.1.2"
+[tool.poetry]
+package-mode = false
 
-[tool.poetry.dev-dependencies]
+[poetry.dependencies]
+pytest = "^8.4.1"
+
+[poetry.group.dev.dependencies]
+pytest-html = "^4.1.1"
+allure-pytest = "^2.15.0"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
