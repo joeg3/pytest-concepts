@@ -4,6 +4,7 @@
 import inspect
 import logging
 import pytest
+import os, os.path
 
 VALID_BROWSERS = ["firefox", "safari", "chrome"]
 VALID_HAND_SHAPES = ["rock", "paper", "scissors"]
@@ -139,22 +140,25 @@ def prefix_jones(request):
 # To access logger in the test case, we have to include the fixture name (logger) as a test case parameter anyhow.
 @pytest.fixture(scope='session', autouse=True)
 def logger():
-        # Usual way to have test name displayed in log entries if this log setup code was in the same file as the tests
-        #logger = logging.getLogger(__name__) # Passing in __name__ makes current file name being executed available for the log entry
+    if not os.path.exists("logs/"): # Create logs folder if it doesn't exist
+        os.makedirs("logs/")
 
-        # Since we are setting up logging in conftest.py, 'tests.conftest' is the name displayed in the log entries
-        # This hack gets the name of the test
-        loggerName = inspect.stack()[2][3]
-        logger = logging.getLogger(loggerName)
+    # Usual way to have test name displayed in log entries if this log setup code was in the same file as the tests
+    #logger = logging.getLogger(__name__) # Passing in __name__ makes current file name being executed available for the log entry
 
-        file_handler = logging.FileHandler('logs/logfile.log')
+    # Since we are setting up logging in conftest.py, 'tests.conftest' is the name displayed in the log entries
+    # This hack gets the name of the test
+    loggerName = inspect.stack()[2][3]
+    logger = logging.getLogger(loggerName)
 
-        # <time> : <logger level> : <file name> : <message from log statement> | <filename>:<line number>
-        format = logging.Formatter("%(asctime)s : %(levelname)s : %(name)s : %(message)s | (%(filename)s:%(lineno)s)")
-        file_handler.setFormatter(format)
+    file_handler = logging.FileHandler('logs/logfile.log')
 
-        logger.addHandler(file_handler)
+    # <time> : <logger level> : <file name> : <message from log statement> | <filename>:<line number>
+    format = logging.Formatter("%(asctime)s : %(levelname)s : %(name)s : %(message)s | (%(filename)s:%(lineno)s)")
+    file_handler.setFormatter(format)
 
-        logger.setLevel(logging.INFO) # Only log INFO and higher, this won't log DEBUG statements
-        return logger
+    logger.addHandler(file_handler)
+
+    logger.setLevel(logging.INFO) # Only log INFO and higher, this won't log DEBUG statements
+    return logger
     
